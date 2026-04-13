@@ -53,6 +53,7 @@ class ServerConfig:
     mask_error_details: bool = False
     max_concurrent_requests: int = 10
     image_output_dir: str = ""
+    application_data_dir: str = ""
     return_full_image: bool = False
     auth_method: AuthMethod = AuthMethod.AUTO
     gcp_project_id: str | None = None
@@ -104,6 +105,14 @@ class ServerConfig:
         output_path = Path(output_dir).resolve()
         output_path.mkdir(parents=True, exist_ok=True)
 
+        # Handle application data directory (used for database storage)
+        app_data_dir = os.getenv("APPLICATION_DATA", "").strip()
+        app_data_path_str = ""
+        if app_data_dir:
+            app_data_path = Path(app_data_dir).resolve()
+            app_data_path.mkdir(parents=True, exist_ok=True)
+            app_data_path_str = str(app_data_path)
+
         gemini_base_url = os.getenv("GEMINI_BASE_URL", "").strip() or None
 
         return cls(
@@ -117,6 +126,7 @@ class ServerConfig:
             port=int(os.getenv("FASTMCP_PORT", "9000")),
             mask_error_details=os.getenv("FASTMCP_MASK_ERRORS", "false").lower() == "true",
             image_output_dir=str(output_path),
+            application_data_dir=app_data_path_str,
             return_full_image=os.getenv("RETURN_FULL_IMAGE", "false").strip().lower()
             in ("true", "1", "yes"),
         )
