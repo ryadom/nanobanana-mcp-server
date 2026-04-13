@@ -44,7 +44,7 @@ class ImageStorageService:
 
     def __init__(self, config: GeminiConfig, base_dir: Optional[str] = None):
         self.config = config
-        self.base_dir = Path(base_dir or "temp_images")
+        self.base_dir = Path(base_dir or ".")
         self.thumbnails_dir = self.base_dir / "thumbnails"
         self.metadata_file = self.base_dir / "image_registry.json"
         self.logger = logging.getLogger(__name__)

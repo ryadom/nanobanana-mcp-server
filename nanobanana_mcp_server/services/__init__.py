@@ -72,9 +72,7 @@ def initialize_services(server_config: ServerConfig, gemini_config: GeminiConfig
     # Initialize enhanced services for workflows.md implementation
     out_dir = server_config.image_output_dir
     _image_database_service = ImageDatabaseService(db_path=os.path.join(out_dir, "images.db"))
-    # Use a subdirectory within the configured output directory for temp images
-    temp_images_dir = os.path.join(out_dir, "temp_images")
-    _image_storage_service = ImageStorageService(gemini_config, temp_images_dir)
+    _image_storage_service = ImageStorageService(gemini_config, out_dir)
     _files_api_service = FilesAPIService(_gemini_client, _image_database_service)
     _enhanced_image_service = EnhancedImageService(
         _gemini_client, _files_api_service, _image_database_service, gemini_config, out_dir
